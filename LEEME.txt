@@ -1,0 +1,18 @@
+MI AGENDA DEL DIA - App instalable (PWA)
+
+Contenido:
+  index.html     la app
+  manifest.json  datos de instalacion
+  sw.js          permite usarla sin internet
+  icons/         iconos
+
+PARA INSTALARLA EN EL CELULAR
+1. Sube TODA la carpeta (descomprimida) a un hosting con https. Gratis: Netlify (arrastrar y soltar en app.netlify.com/drop), GitHub Pages o Cloudflare Pages.
+2. Abre el enlace que te den desde el celular.
+3. Android (Chrome): menu de tres puntos > "Instalar aplicacion" o "Agregar a pantalla principal".
+   iPhone (Safari): boton Compartir > "Agregar a pantalla de inicio".
+4. Se abre como una app, con su icono, y funciona sin internet.
+
+NOTAS
+- Tus actividades se guardan en el propio celular (no se suben a ningun lado).
+- Si abres index.html directo desde el celular funciona, pero no se instala: para instalar hace falta que este en https.
