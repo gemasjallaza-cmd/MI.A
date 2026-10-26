@@ -30,6 +30,8 @@ button,select{font:inherit;color:inherit;cursor:pointer}
 .sub{display:flex;align-items:center;justify-content:space-between;gap:8px;color:var(--mut);margin:4px 0 12px;font-size:.95rem}
 .bell{border:0;background:var(--card);border-radius:99px;padding:6px 12px;font-weight:600;font-size:.85rem;white-space:nowrap}
 .bell[aria-pressed=true]{background:var(--acc);color:#fff}
+.bell[hidden]{display:none}
+.acts{display:flex;gap:6px}
 .bar{height:10px;background:var(--card);border-radius:99px;overflow:hidden;margin-bottom:16px}
 .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:99px;transition:width .3s}
 .tabs{display:flex;gap:6px;background:var(--card);padding:5px;border-radius:18px;margin-bottom:16px;box-shadow:0 2px 10px #8B5CF61F}
@@ -87,6 +89,15 @@ li.done .t{color:var(--mut)}
 </style>
 </head>
 <body class="c1">
+<div id="ih" style="display:none;position:fixed;inset:0;z-index:30;background:#0007;align-items:center;justify-content:center;padding:20px">
+  <div style="background:var(--card);color:var(--ink);border-radius:20px;padding:20px;max-width:420px;width:100%;max-height:85vh;overflow:auto">
+    <h2 style="margin:0 0 10px;font-size:1.3rem">Cómo instalar la app</h2>
+    <p style="margin:0 0 6px"><b>Android (Chrome):</b> toca los tres puntos ⋮ y elige «Instalar aplicación» o «Agregar a la pantalla principal».</p>
+    <p style="margin:0 0 6px"><b>iPhone (Safari):</b> toca Compartir y elige «Agregar a pantalla de inicio».</p>
+    <p style="margin:0 0 14px"><b>Si dice que ya está instalada:</b> búscala en tu lista de aplicaciones con el nombre «MI.A» y ábrela desde ahí. Para reinstalarla, mantén presionado su icono, elige «Desinstalar» y luego toca Instalar otra vez.</p>
+    <button class="add" id="ihx" style="padding:12px 22px">Entendido</button>
+  </div>
+</div>
 <div class="ban" id="ban" role="alert"></div>
 <main>
   <div class="top">
@@ -97,7 +108,7 @@ li.done .t{color:var(--mut)}
       <button class="nb" id="next" aria-label="Siguiente">›</button>
     </div>
   </div>
-  <div class="sub"><span id="resumen"></span><button class="bell" id="bell" aria-pressed="false">🔔 Avisos</button></div>
+  <div class="sub"><span id="resumen"></span><span class="acts"><button class="bell" id="inst" hidden>📲 Instalar</button><button class="bell" id="bell" aria-pressed="false">🔔 Avisos</button></span></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
 
   <div class="tabs" role="tablist">
@@ -305,6 +316,17 @@ li.done .t{color:var(--mut)}
     });
   }
   setInterval(check,15000);setInterval(render,60000);
+  // Instalar
+  var dp=null,inst=$('inst');
+  var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
+  if(!standalone)inst.hidden=false;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;});
+  window.addEventListener('appinstalled',function(){dp=null;inst.hidden=true;banner('✓ App instalada. Ábrela desde su icono.');});
+  inst.onclick=function(){
+    if(dp){dp.prompt();dp.userChoice.then(function(){dp=null;});return;}
+    $('ih').style.display='flex';
+  };
+  $('ihx').onclick=function(){$('ih').style.display='none';};
   paintBell();render();
 })();
 </script>
